@@ -52,6 +52,8 @@
 + (CGFloat)timerStartTime;
 + (LTHPasscodeViewController *)sharedUser;
 
+- (void)deletePasscode;
+
 
 @end
 

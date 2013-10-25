@@ -15,6 +15,7 @@ static NSString *const kKeychainServiceName = @"demoServiceName";
 static NSString *const kUserDefaultsKeyForTimerDuration = @"passcodeTimerDuration";
 static NSString *const kPasscodeCharacter = @"\u2014"; // A longer "-"
 static CGFloat const kLabelFontSize = 15.0f;
+static CGFloat const kLabelSmallFontSize = 10.0f;
 static CGFloat const kPasscodeFontSize = 33.0f;
 static CGFloat const kFontSizeModifier = 1.5f;
 static CGFloat const kiPhoneHorizontalGap = 40.0f;
@@ -49,6 +50,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 #define kFailedAttemptLabelBackgroundColor [UIColor colorWithRed:0.8f green:0.1f blue:0.2f alpha:1.000f]
 // Fonts
 #define kLabelFont (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelFontSize * kFontSizeModifier] : [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelFontSize])
+#define kLabelSmallFont (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelSmallFontSize * kFontSizeModifier] : [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelSmallFontSize])
 #define kPasscodeFont (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? [UIFont fontWithName: @"AvenirNext-Regular" size: kPasscodeFontSize * kFontSizeModifier] : [UIFont fontWithName: @"AvenirNext-Regular" size: kPasscodeFontSize])
 // Text Colors
 #define kLabelTextColor [UIColor colorWithWhite:0.31f alpha:1.0f]
@@ -502,6 +504,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 
 - (void)prepareNavigationControllerWithController:(UIViewController *)viewController {
 	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: self];
+    navController.modalPresentationStyle = UIModalPresentationFormSheet;
 	[viewController presentViewController: navController animated: YES completion: nil];
 	[self rotateAccordingToStatusBarOrientationAndSupportedOrientations];
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel
@@ -513,7 +516,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 - (void)showForEnablingPasscodeInViewController:(UIViewController *)viewController {
 	[self prepareForEnablingPasscode];
 	[self prepareNavigationControllerWithController: viewController];
-	self.title = NSLocalizedString(@"Enable Passcode", @"");
+	self.title = NSLocalizedString(@"Setup Kiosk Mode", @"");
 }
 
 
@@ -712,6 +715,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_failedAttemptLabel.textColor = kFailedAttemptLabelTextColor;
 	_failedAttempts = 0;
 	_failedAttemptLabel.hidden = YES;
+    _failedAttemptLabel.font = kLabelFont;
 	_passcodeTextField.text = @"";
 	if (_isUserConfirmingPasscode) {
 		if (_isUserEnablingPasscode) _enterPasscodeLabel.text = NSLocalizedString(@"Re-enter your passcode", @"");
@@ -722,7 +726,19 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 			_enterPasscodeLabel.text = NSLocalizedString(@"Enter your new passcode", @"");
 		}
 	}
-	else _enterPasscodeLabel.text = NSLocalizedString(@"Enter your passcode", @"");
+	else{
+        _enterPasscodeLabel.text = NSLocalizedString(@"Enter a passcode", @"");
+        
+        _failedAttemptLabel.hidden = NO;
+        _failedAttemptLabel.text = NSLocalizedString(@"The passcode will be used to exit Kiosk Mode.", @"");
+        _failedAttemptLabel.backgroundColor = [UIColor clearColor];
+        _failedAttemptLabel.layer.borderWidth = 0;
+        _failedAttemptLabel.layer.borderColor = [UIColor clearColor].CGColor;
+        _failedAttemptLabel.textColor = kLabelTextColor;
+        _failedAttemptLabel.font = kLabelSmallFont;
+    }
+    
+    
 }
 
 
@@ -756,6 +772,11 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_failedAttemptLabel.hidden = NO;
 }
 
+- (void)deletePasscode{
+    [SFHFKeychainUtils deleteItemForUsername: kKeychainPasscode
+                              andServiceName: kKeychainServiceName
+                                       error: nil];
+}
 
 #pragma mark - Notification Observers
 - (void)applicationDidEnterBackground {
@@ -813,22 +834,22 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 - (id)init {
 	self = [super init];
 	if (self) {
-		[[NSNotificationCenter defaultCenter] addObserver: self
-												 selector: @selector(applicationDidEnterBackground)
-													 name: UIApplicationDidEnterBackgroundNotification
-												   object: nil];
-		[[NSNotificationCenter defaultCenter] addObserver: self
-												 selector: @selector(applicationWillResignActive)
-													 name: UIApplicationWillResignActiveNotification
-												   object: nil];
-		[[NSNotificationCenter defaultCenter] addObserver: self
-												 selector: @selector(applicationDidBecomeActive)
-													 name: UIApplicationDidBecomeActiveNotification
-												   object: nil];
-		[[NSNotificationCenter defaultCenter] addObserver: self
-												 selector: @selector(applicationWillEnterForeground)
-													 name: UIApplicationWillEnterForegroundNotification
-												   object: nil];
+//		[[NSNotificationCenter defaultCenter] addObserver: self
+//												 selector: @selector(applicationDidEnterBackground)
+//													 name: UIApplicationDidEnterBackgroundNotification
+//												   object: nil];
+//		[[NSNotificationCenter defaultCenter] addObserver: self
+//												 selector: @selector(applicationWillResignActive)
+//													 name: UIApplicationWillResignActiveNotification
+//												   object: nil];
+//		[[NSNotificationCenter defaultCenter] addObserver: self
+//												 selector: @selector(applicationDidBecomeActive)
+//													 name: UIApplicationDidBecomeActiveNotification
+//												   object: nil];
+//		[[NSNotificationCenter defaultCenter] addObserver: self
+//												 selector: @selector(applicationWillEnterForeground)
+//													 name: UIApplicationWillEnterForegroundNotification
+//												   object: nil];
 		
 		_coverView = [[UIView alloc] initWithFrame: CGRectZero];
 		_coverView.backgroundColor = kCoverViewBackgroundColor;
