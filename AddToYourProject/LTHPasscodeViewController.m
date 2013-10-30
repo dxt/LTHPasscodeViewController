@@ -383,7 +383,17 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 			[self removeFromParentViewController];
 		}
 		else {
-			[self dismissViewControllerAnimated: YES completion: nil];
+			[self dismissViewControllerAnimated: YES completion:^{
+                if(_isUserEnablingPasscode){
+                    if([self.delegate respondsToSelector:@selector(passcodeViewControllerDidEnablePasscode)]){
+                        [self.delegate passcodeViewControllerDidEnablePasscode];
+                    }
+                }else if(_isUserTurningPasscodeOff){
+                    if([self.delegate respondsToSelector:@selector(passcodeViewControllerDidTurnOffPasscode)]){
+                        [self.delegate passcodeViewControllerDidTurnOffPasscode];
+                    }
+                }
+            }];
 		}
 	}];
 	[[NSNotificationCenter defaultCenter] removeObserver: self
@@ -517,6 +527,14 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	[self prepareForEnablingPasscode];
 	[self prepareNavigationControllerWithController: viewController];
 	self.title = NSLocalizedString(@"Setup Kiosk Mode", @"");
+    
+    _failedAttemptLabel.hidden = NO;
+    _failedAttemptLabel.text = NSLocalizedString(@"The passcode will be used to exit Kiosk mode.", @"");
+    _failedAttemptLabel.backgroundColor = [UIColor clearColor];
+    _failedAttemptLabel.layer.borderWidth = 0;
+    _failedAttemptLabel.layer.borderColor = [UIColor clearColor].CGColor;
+    _failedAttemptLabel.textColor = kLabelTextColor;
+    _failedAttemptLabel.font = kLabelSmallFont;
 }
 
 
@@ -530,7 +548,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 - (void)showForTurningOffPasscodeInViewController:(UIViewController *)viewController {
 	[self prepareForTurningOffPasscode];
 	[self prepareNavigationControllerWithController: viewController];
-	self.title = NSLocalizedString(@"Turn Off Passcode", @"");
+	self.title = NSLocalizedString(@"Exit Kiosk Mode", @"");
 }
 
 
@@ -725,17 +743,13 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 		if (_isUserEnablingPasscode || _isUserChangingPasscode) {
 			_enterPasscodeLabel.text = NSLocalizedString(@"Enter your new passcode", @"");
 		}
-	}
+	}else if(_isUserEnablingPasscode){
+        _enterPasscodeLabel.text = NSLocalizedString(@"To begin Kiosk mode, enter a passcode", @"");
+    }else if(_isUserTurningPasscodeOff){
+        _enterPasscodeLabel.text = NSLocalizedString(@"Enter the passcode", @"");
+    }
 	else{
         _enterPasscodeLabel.text = NSLocalizedString(@"Enter a passcode", @"");
-        
-        _failedAttemptLabel.hidden = NO;
-        _failedAttemptLabel.text = NSLocalizedString(@"The passcode will be used to exit Kiosk Mode.", @"");
-        _failedAttemptLabel.backgroundColor = [UIColor clearColor];
-        _failedAttemptLabel.layer.borderWidth = 0;
-        _failedAttemptLabel.layer.borderColor = [UIColor clearColor].CGColor;
-        _failedAttemptLabel.textColor = kLabelTextColor;
-        _failedAttemptLabel.font = kLabelSmallFont;
     }
     
     

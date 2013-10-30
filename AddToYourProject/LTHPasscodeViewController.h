@@ -62,4 +62,8 @@
 @protocol LTHPasscodeViewControllerDelegate <NSObject>
 @optional
 - (void)passcodeViewControllerWasDismissed;
+
+- (void)passcodeViewControllerDidEnablePasscode;
+- (void)passcodeViewControllerDidTurnOffPasscode;
+
 @end
