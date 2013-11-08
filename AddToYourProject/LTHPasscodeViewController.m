@@ -529,7 +529,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	self.title = NSLocalizedString(@"Setup Kiosk Mode", @"");
     
     _failedAttemptLabel.hidden = NO;
-    _failedAttemptLabel.text = NSLocalizedString(@"The passcode will be used to exit Kiosk mode.", @"");
+    _failedAttemptLabel.text = NSLocalizedString(@"This passcode will be used to exit Kiosk mode.", @"");
     _failedAttemptLabel.backgroundColor = [UIColor clearColor];
     _failedAttemptLabel.layer.borderWidth = 0;
     _failedAttemptLabel.layer.borderColor = [UIColor clearColor].CGColor;
