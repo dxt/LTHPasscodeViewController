@@ -63,7 +63,7 @@
 @optional
 - (void)passcodeViewControllerWasDismissed;
 
-- (void)passcodeViewControllerDidEnablePasscode;
-- (void)passcodeViewControllerDidTurnOffPasscode;
+- (void)passcodeViewControllerDidEnablePasscode:(LTHPasscodeViewController *)passcodeViewController;
+- (void)passcodeViewControllerDidTurnOffPasscode:(LTHPasscodeViewController *)passcodeViewController;
 
 @end

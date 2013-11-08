@@ -383,17 +383,21 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 			[self removeFromParentViewController];
 		}
 		else {
-			[self dismissViewControllerAnimated: YES completion:^{
-                if(_isUserEnablingPasscode){
-                    if([self.delegate respondsToSelector:@selector(passcodeViewControllerDidEnablePasscode)]){
-                        [self.delegate passcodeViewControllerDidEnablePasscode];
-                    }
-                }else if(_isUserTurningPasscodeOff){
-                    if([self.delegate respondsToSelector:@selector(passcodeViewControllerDidTurnOffPasscode)]){
-                        [self.delegate passcodeViewControllerDidTurnOffPasscode];
-                    }
+            if(_isUserEnablingPasscode){
+                if([self.delegate respondsToSelector:@selector(passcodeViewControllerDidEnablePasscode:)]){
+                    [self.delegate passcodeViewControllerDidEnablePasscode:self];
+                }else{
+                    [self dismissViewControllerAnimated: YES completion:nil];
                 }
-            }];
+            }else if(_isUserTurningPasscodeOff){
+                if([self.delegate respondsToSelector:@selector(passcodeViewControllerDidTurnOffPasscode:)]){
+                    [self.delegate passcodeViewControllerDidTurnOffPasscode:self];
+                }else{
+                    [self dismissViewControllerAnimated: YES completion:nil];
+                }
+            }else{
+                [self dismissViewControllerAnimated: YES completion:nil];
+            }
 		}
 	}];
 	[[NSNotificationCenter defaultCenter] removeObserver: self
