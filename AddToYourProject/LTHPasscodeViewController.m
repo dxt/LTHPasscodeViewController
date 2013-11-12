@@ -330,9 +330,13 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 //	[[NSNotificationCenter defaultCenter] postNotificationName: @"dismissPasscodeViewController"
 //														object: self
 //													  userInfo: nil];
-	if ([self.delegate respondsToSelector: @selector(passcodeViewControllerWasDismissed)])
-		[self.delegate performSelector: @selector(passcodeViewControllerWasDismissed)];
-	[self dismissViewControllerAnimated: YES completion: nil];
+    if([self.delegate respondsToSelector:@selector(passcodeViewControllerCancelled:)]){
+        [self.delegate passcodeViewControllerCancelled:self];
+    }else{
+        if ([self.delegate respondsToSelector: @selector(passcodeViewControllerWasDismissed)])
+            [self.delegate performSelector: @selector(passcodeViewControllerWasDismissed)];
+        [self dismissViewControllerAnimated: YES completion:nil];
+    }
 }
 
 
