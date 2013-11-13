@@ -57,6 +57,12 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 #define kPasscodeTextColor [UIColor colorWithWhite:0.31f alpha:1.0f]
 #define kFailedAttemptLabelTextColor [UIColor whiteColor]
 
+@interface LTHPasscodeViewController ()
+
+@property (strong, nonatomic) UIButton *forgotPassscodeButton;
+
+@end
+
 @implementation LTHPasscodeViewController
 
 
@@ -185,6 +191,17 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
     [_animatingView addSubview:_passcodeTextField];
 	
 	_enterPasscodeLabel.text = _isUserChangingPasscode ? NSLocalizedString(@"Enter your old passcode", @"") : NSLocalizedString(@"Enter your passcode", @"");
+    
+    self.forgotPassscodeButton = [[UIButton alloc] initWithFrame:CGRectMake(200, 200, 200, 44)];
+    NSMutableAttributedString *buttonTextString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"Forgot Passcode", @"Forgot passcode button label")];
+    [buttonTextString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, [buttonTextString length])];
+    [buttonTextString addAttribute:NSFontAttributeName value:kLabelSmallFont range:NSMakeRange(0, [buttonTextString length])];
+    [buttonTextString addAttribute:NSForegroundColorAttributeName value:kLabelTextColor range:NSMakeRange(0, [buttonTextString length])];
+    [self.forgotPassscodeButton setAttributedTitle:buttonTextString forState:UIControlStateNormal];
+    self.forgotPassscodeButton.hidden = YES;
+    [_animatingView addSubview:self.forgotPassscodeButton];
+    [self.forgotPassscodeButton addTarget:self action:@selector(forgotPassscodeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    self.forgotPassscodeButton.translatesAutoresizingMaskIntoConstraints = NO;
 	
 	_enterPasscodeLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	_failedAttemptLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -314,8 +331,30 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	[self.view addConstraint:failedAttemptLabelCenterY];
 	[self.view addConstraint:failedAttemptLabelWidth];
 	[self.view addConstraint:failedAttemptLabelHeight];
+    
+    NSLayoutConstraint *forgotPasscodeButtonCenterX = [NSLayoutConstraint constraintWithItem: self.forgotPassscodeButton
+																				 attribute: NSLayoutAttributeCenterX
+																				 relatedBy: NSLayoutRelationEqual
+																					toItem: self.view
+																				 attribute: NSLayoutAttributeCenterX
+																				multiplier: 1.0f
+																				  constant: 0.0f];
+    
+    NSLayoutConstraint *forgotPasscodeButtonCenterY = [NSLayoutConstraint constraintWithItem: self.forgotPassscodeButton
+																				 attribute: NSLayoutAttributeCenterY
+																				 relatedBy: NSLayoutRelationEqual
+																					toItem: _failedAttemptLabel
+																				 attribute: NSLayoutAttributeBottom
+																				multiplier: 1.0f
+																				  constant: 30];
+    [self.view addConstraint:forgotPasscodeButtonCenterX];
+    [self.view addConstraint:forgotPasscodeButtonCenterY];
 }
 
+- (void)prepareToDismiss{
+    _isCurrentlyOnScreen = NO;
+    [_passcodeTextField resignFirstResponder];
+}
 
 - (void)cancelAndDismissMe {
 	_isCurrentlyOnScreen = NO;
@@ -543,6 +582,8 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
     _failedAttemptLabel.layer.borderColor = [UIColor clearColor].CGColor;
     _failedAttemptLabel.textColor = kLabelTextColor;
     _failedAttemptLabel.font = kLabelSmallFont;
+    
+    self.forgotPassscodeButton.hidden = YES;
 }
 
 
@@ -681,6 +722,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_isUserBeingAskedForNewPasscode = YES;
 	_isUserConfirmingPasscode = NO;
 	_failedAttemptLabel.hidden = YES;
+    self.forgotPassscodeButton.hidden = YES;
 	
 	CATransition *transition = [CATransition animation];
 	[transition setDelegate: self];
@@ -713,6 +755,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_isUserBeingAskedForNewPasscode = NO;
 	_isUserConfirmingPasscode = YES;
 	_failedAttemptLabel.hidden = YES;
+    self.forgotPassscodeButton.hidden = YES;
 	
 	CATransition *transition = [CATransition animation];
 	[transition setDelegate: self];
@@ -741,6 +784,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_failedAttemptLabel.textColor = kFailedAttemptLabelTextColor;
 	_failedAttempts = 0;
 	_failedAttemptLabel.hidden = YES;
+    self.forgotPassscodeButton.hidden = YES;
     _failedAttemptLabel.font = kLabelFont;
 	_passcodeTextField.text = @"";
 	if (_isUserConfirmingPasscode) {
@@ -779,6 +823,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_failedAttemptLabel.layer.borderWidth = 0;
 	_failedAttemptLabel.layer.borderColor = [UIColor clearColor].CGColor;
 	_failedAttemptLabel.textColor = kLabelTextColor;
+    self.forgotPassscodeButton.hidden = YES;
 }
 
 
@@ -792,12 +837,19 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	}
 	_failedAttemptLabel.layer.cornerRadius = kFailedAttemptLabelHeight * 0.65f;
 	_failedAttemptLabel.hidden = NO;
+    self.forgotPassscodeButton.hidden = NO;
 }
 
 - (void)deletePasscode{
     [SFHFKeychainUtils deleteItemForUsername: kKeychainPasscode
                               andServiceName: kKeychainServiceName
                                        error: nil];
+}
+
+- (void)forgotPassscodeButtonPressed:(id)sender{
+    if([self.delegate respondsToSelector:@selector(passcodeViewControllerForgotPasscode:)]){
+        [self.delegate passcodeViewControllerForgotPasscode:self];
+    }
 }
 
 #pragma mark - Notification Observers

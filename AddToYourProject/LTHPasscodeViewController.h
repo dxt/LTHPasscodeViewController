@@ -53,6 +53,7 @@
 + (LTHPasscodeViewController *)sharedUser;
 
 - (void)deletePasscode;
+- (void)prepareToDismiss;
 
 
 @end
@@ -67,5 +68,6 @@
 - (void)passcodeViewControllerDidTurnOffPasscode:(LTHPasscodeViewController *)passcodeViewController;
 
 - (void)passcodeViewControllerCancelled:(LTHPasscodeViewController *)passcodeViewController;
+- (void)passcodeViewControllerForgotPasscode:(LTHPasscodeViewController *)passcodeViewController;
 
 @end
