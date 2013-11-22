@@ -70,4 +70,7 @@
 - (void)passcodeViewControllerCancelled:(LTHPasscodeViewController *)passcodeViewController;
 - (void)passcodeViewControllerForgotPasscode:(LTHPasscodeViewController *)passcodeViewController;
 
+- (void)passcodeViewController:(LTHPasscodeViewController *)passcodeViewController failedAttemptWithCount:(NSInteger)count;
+
+
 @end

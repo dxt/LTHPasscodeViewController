@@ -838,6 +838,10 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_failedAttemptLabel.layer.cornerRadius = kFailedAttemptLabelHeight * 0.65f;
 	_failedAttemptLabel.hidden = NO;
     self.forgotPassscodeButton.hidden = NO;
+    
+    if([self.delegate respondsToSelector:@selector(passcodeViewController:failedAttemptWithCount:)]){
+        [self.delegate passcodeViewController:self failedAttemptWithCount:_failedAttempts];
+    }
 }
 
 - (void)deletePasscode{
