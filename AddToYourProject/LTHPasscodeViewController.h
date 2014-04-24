@@ -34,6 +34,7 @@
 @property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, weak) id<LTHPasscodeViewControllerDelegate> delegate;
 @property (assign) BOOL isCurrentlyOnScreen;
+@property (nonatomic) NSUInteger maxFailedPasscodeAttempts;
 
 - (void)showLockscreen;
 - (void)showForEnablingPasscodeInViewController:(UIViewController *)viewController;
@@ -51,10 +52,12 @@
 + (CGFloat)timerDuration;
 + (CGFloat)timerStartTime;
 + (LTHPasscodeViewController *)sharedUser;
++ (NSUInteger)failedPasscodeAttempts;
++ (void)resetFailedPasscodeAttempts;
 
 - (void)deletePasscode;
 - (void)prepareToDismiss;
-
+- (BOOL)maxFailedPasscodeAttemptsReached;
 
 @end
 
