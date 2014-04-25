@@ -57,8 +57,8 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 #define kPasscodeTextColor [UIColor colorWithWhite:0.31f alpha:1.0f]
 #define kFailedAttemptLabelTextColor [UIColor whiteColor]
 // Persistent Data
-#define kFailedPasscodeAttempts [[NSUserDefaults standardUserDefaults] integerForKey:@"com.signnow.failed_passcode_attempts"]
-#define kFailedPasscodeAttemptsSet(v) [[NSUserDefaults standardUserDefaults] setInteger:v forKey:@"com.signnow.failed_passcode_attempts"]
+#define FailedPasscodeAttempts [[NSUserDefaults standardUserDefaults] integerForKey:@"com.signnow.failed_passcode_attempts"]
+#define FailedPasscodeAttemptsSet(v) [[NSUserDefaults standardUserDefaults] setInteger:v forKey:@"com.signnow.failed_passcode_attempts"]
 
 @interface LTHPasscodeViewController ()
 
@@ -121,7 +121,6 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	}
 	
 	_isCurrentlyOnScreen = YES;
-    _maxFailedPasscodeAttempts = 15;
 	_animatingView = [[UIView alloc] initWithFrame: self.view.frame];
 	[self.view addSubview: _animatingView];
 	
@@ -385,7 +384,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 - (void)dismissMe {
 	_isCurrentlyOnScreen = NO;
 	[self resetUI];
-    kFailedPasscodeAttemptsSet(0);
+    FailedPasscodeAttemptsSet(0);
 	[_passcodeTextField resignFirstResponder];
 	[UIView animateWithDuration: kLockAnimationDuration animations: ^{
 		if (_beingDisplayedAsLockscreen) {
@@ -697,7 +696,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 			// Changing Passcode and the entered Passcode is correct.
 			else if ([typedString isEqualToString: savedPasscode]){
 				[self performSelector: @selector(askForNewPasscode) withObject: nil afterDelay: 0.15f];
-				kFailedPasscodeAttemptsSet(0);
+				FailedPasscodeAttemptsSet(0);
 			}
 			// Acting as lockscreen and the entered Passcode is incorrect.
 			else {
@@ -833,17 +832,17 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 - (void)denyAccess {
 	[self resetTextFields];
 	_passcodeTextField.text = @"";
-	kFailedPasscodeAttemptsSet(kFailedPasscodeAttempts + 1);
-	if (kFailedPasscodeAttempts == 1) _failedAttemptLabel.text = [NSString stringWithFormat: NSLocalizedString(@"%i Passcode Failed Attempt", @""), kFailedPasscodeAttempts];
+	FailedPasscodeAttemptsSet(FailedPasscodeAttempts + 1);
+	if (FailedPasscodeAttempts == 1) _failedAttemptLabel.text = [NSString stringWithFormat: NSLocalizedString(@"%i Passcode Failed Attempt", @""), FailedPasscodeAttempts];
 	else {
-		_failedAttemptLabel.text = [NSString stringWithFormat: NSLocalizedString(@"%i Passcode Failed Attempts", @""), kFailedPasscodeAttempts];
+		_failedAttemptLabel.text = [NSString stringWithFormat: NSLocalizedString(@"%i Passcode Failed Attempts", @""), FailedPasscodeAttempts];
 	}
 	_failedAttemptLabel.layer.cornerRadius = kFailedAttemptLabelHeight * 0.65f;
 	_failedAttemptLabel.hidden = NO;
     self.forgotPassscodeButton.hidden = NO;
     
     if([self.delegate respondsToSelector:@selector(passcodeViewController:failedAttemptWithCount:)]){
-        [self.delegate passcodeViewController:self failedAttemptWithCount:kFailedPasscodeAttempts];
+        [self.delegate passcodeViewController:self failedAttemptWithCount:FailedPasscodeAttempts];
     }
 }
 
@@ -859,16 +858,12 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
     }
 }
 
-- (BOOL)maxFailedPasscodeAttemptsReached{
-    return kFailedPasscodeAttempts >= self.maxFailedPasscodeAttempts;
-}
-
 + (NSUInteger)failedPasscodeAttempts{
-    return kFailedPasscodeAttempts;
+    return FailedPasscodeAttempts;
 }
 
 + (void)resetFailedPasscodeAttempts{
-    kFailedPasscodeAttemptsSet(0);
+    FailedPasscodeAttemptsSet(0);
 }
 
 #pragma mark - Notification Observers
