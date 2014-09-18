@@ -690,7 +690,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 			else if (_isUserConfirmingPasscode) {
 				// User entered the confirmation Passcode correctly
 				if ([typedString isEqualToString: _tempPasscode]) {
-					[self dismissMe];
+                    [self performSelector:@selector(dismissMe) withObject:nil afterDelay: 0.15f];
 				}
 				// User entered the confirmation Passcode incorrectly, start over.
 				else {
