@@ -63,6 +63,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 @interface LTHPasscodeViewController ()
 
 @property (strong, nonatomic) UIButton *forgotPassscodeButton;
+@property (nonatomic) BOOL passcodeEntered;
 
 @end
 
@@ -204,6 +205,8 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
     [_animatingView addSubview:self.forgotPassscodeButton];
     [self.forgotPassscodeButton addTarget:self action:@selector(forgotPassscodeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     self.forgotPassscodeButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.passcodeEntered = NO;
 	
 	_enterPasscodeLabel.translatesAutoresizingMaskIntoConstraints = NO;
 	_failedAttemptLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -672,7 +675,8 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	if (typedString.length == 4) _fourthDigitTextField.secureTextEntry = YES;
 	else _fourthDigitTextField.secureTextEntry = NO;
 	
-	if (typedString.length == 4) {
+	if (typedString.length == 4 && self.passcodeEntered == NO) {
+        self.passcodeEntered = YES;
 		NSString *savedPasscode = [SFHFKeychainUtils getPasswordForUsername: kKeychainPasscode andServiceName: kKeychainServiceName error: nil];
 		// Entering from Settings. If savedPasscode is empty, it means
 		// the user is setting a new Passcode now, or is changing his current Passcode.
@@ -782,6 +786,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_secondDigitTextField.secureTextEntry = NO;
 	_thirdDigitTextField.secureTextEntry = NO;
 	_fourthDigitTextField.secureTextEntry = NO;
+    self.passcodeEntered = NO;
 }
 
 
@@ -809,8 +814,6 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	else{
         _enterPasscodeLabel.text = NSLocalizedString(@"Enter a passcode", @"");
     }
-    
-    
 }
 
 
