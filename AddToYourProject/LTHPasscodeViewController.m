@@ -1029,7 +1029,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 
 + (CGFloat)getStatusBarHeight {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if(UIInterfaceOrientationIsPortrait(orientation) || SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+    if(UIInterfaceOrientationIsPortrait(orientation) || [[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
         return [UIApplication sharedApplication].statusBarFrame.size.height;
     }
     else {
