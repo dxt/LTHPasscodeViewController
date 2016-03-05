@@ -130,6 +130,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_enterPasscodeLabel.textColor = kLabelTextColor;
 	_enterPasscodeLabel.font = kLabelFont;
 	_enterPasscodeLabel.textAlignment = NSTextAlignmentCenter;
+    _enterPasscodeLabel.numberOfLines = 0;
 	[_animatingView addSubview: _enterPasscodeLabel];
 	
 	// It is also used to display the "Passcodes did not match" error message if the user fails to confirm the passcode.
@@ -192,6 +193,12 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_passcodeTextField.keyboardType = UIKeyboardTypeNumberPad;
 	[_passcodeTextField becomeFirstResponder];
     [_animatingView addSubview:_passcodeTextField];
+    
+    if([_passcodeTextField respondsToSelector:@selector(inputAssistantItem)]) {
+        UITextInputAssistantItem* item = [_passcodeTextField inputAssistantItem];
+        item.leadingBarButtonGroups = @[];
+        item.trailingBarButtonGroups = @[];
+    }
 	
 	_enterPasscodeLabel.text = _isUserChangingPasscode ? NSLocalizedString(@"Enter your old passcode", @"") : NSLocalizedString(@"Enter your passcode", @"");
     
@@ -221,7 +228,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	// That's why only portrait is selected for iPhone's supported orientations.
 	// Modify this to fit your needs.
 	
-	CGFloat yOffsetFromCenter = -self.view.frame.size.height * 0.24;
+	CGFloat yOffsetFromCenter = -self.view.frame.size.height * 0.30;
 	NSLayoutConstraint *enterPasscodeConstraintCenterX = [NSLayoutConstraint constraintWithItem: _enterPasscodeLabel
 																					  attribute: NSLayoutAttributeCenterX
 																					  relatedBy: NSLayoutRelationEqual
@@ -238,6 +245,15 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 																					   constant: yOffsetFromCenter];
     [self.view addConstraint: enterPasscodeConstraintCenterX];
     [self.view addConstraint: enterPasscodeConstraintCenterY];
+    
+    NSLayoutConstraint *enterPasscodeConstraintWidth = [NSLayoutConstraint constraintWithItem:_enterPasscodeLabel
+                                                                                    attribute:NSLayoutAttributeWidth
+                                                                                    relatedBy:NSLayoutRelationEqual
+                                                                                       toItem:self.view
+                                                                                    attribute:NSLayoutAttributeWidth
+                                                                                   multiplier:1.0f
+                                                                                     constant:0.0f];
+    [self.view addConstraint: enterPasscodeConstraintWidth];
 	
 	NSLayoutConstraint *firstDigitX = [NSLayoutConstraint constraintWithItem: _firstDigitTextField
 																   attribute: NSLayoutAttributeLeft
