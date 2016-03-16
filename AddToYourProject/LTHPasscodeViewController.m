@@ -371,6 +371,11 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
     [self.view addConstraint:forgotPasscodeButtonCenterY];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [_passcodeTextField becomeFirstResponder];
+}
+
 - (void)prepareToDismiss{
     _isCurrentlyOnScreen = NO;
     [_passcodeTextField resignFirstResponder];
