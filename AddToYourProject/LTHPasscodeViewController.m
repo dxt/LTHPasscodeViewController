@@ -228,7 +228,6 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	// That's why only portrait is selected for iPhone's supported orientations.
 	// Modify this to fit your needs.
 	
-	CGFloat yOffsetFromCenter = -self.view.frame.size.height * 0.30;
 	NSLayoutConstraint *enterPasscodeConstraintCenterX = [NSLayoutConstraint constraintWithItem: _enterPasscodeLabel
 																					  attribute: NSLayoutAttributeCenterX
 																					  relatedBy: NSLayoutRelationEqual
@@ -241,8 +240,8 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 																					  relatedBy: NSLayoutRelationEqual
 																						 toItem: self.view
 																					  attribute: NSLayoutAttributeCenterY
-																					 multiplier: 1.0f
-																					   constant: yOffsetFromCenter];
+																					 multiplier: 0.3f
+																					   constant: 0.0f];
     [self.view addConstraint: enterPasscodeConstraintCenterX];
     [self.view addConstraint: enterPasscodeConstraintCenterY];
     
