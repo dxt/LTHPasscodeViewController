@@ -14,7 +14,8 @@ static NSString *const kKeychainTimerStart = @"demoPasscodeTimerStart";
 static NSString *const kKeychainServiceName = @"demoServiceName";
 static NSString *const kUserDefaultsKeyForTimerDuration = @"passcodeTimerDuration";
 static NSString *const kPasscodeCharacter = @"\u2014"; // A longer "-"
-static CGFloat const kLabelFontSize = 13.0f;
+static CGFloat const kLabelFontSize = 15.0f;
+static CGFloat const kLabelMediumFontSize = 13.0f;
 static CGFloat const kLabelSmallFontSize = 10.0f;
 static CGFloat const kPasscodeFontSize = 33.0f;
 static CGFloat const kFontSizeModifier = 1.5f;
@@ -50,6 +51,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 #define kFailedAttemptLabelBackgroundColor [UIColor colorWithRed:0.8f green:0.1f blue:0.2f alpha:1.000f]
 // Fonts
 #define kLabelFont (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelFontSize * kFontSizeModifier] : [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelFontSize])
+#define kLabelMediumFont (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelMediumFontSize * kFontSizeModifier] : [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelMediumFontSize])
 #define kLabelSmallFont (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelSmallFontSize * kFontSizeModifier] : [UIFont fontWithName: @"AvenirNext-Regular" size: kLabelSmallFontSize])
 #define kPasscodeFont (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? [UIFont fontWithName: @"AvenirNext-Regular" size: kPasscodeFontSize * kFontSizeModifier] : [UIFont fontWithName: @"AvenirNext-Regular" size: kPasscodeFontSize])
 // Text Colors
@@ -852,6 +854,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	_failedAttemptLabel.layer.borderWidth = 0;
 	_failedAttemptLabel.layer.borderColor = [UIColor clearColor].CGColor;
 	_failedAttemptLabel.textColor = kLabelTextColor;
+    _failedAttemptLabel.font = kLabelMediumFont;
     self.forgotPassscodeButton.hidden = YES;
 }
 
