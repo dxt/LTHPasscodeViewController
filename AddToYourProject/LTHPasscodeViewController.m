@@ -7,6 +7,7 @@
 //
 
 #import "LTHPasscodeViewController.h"
+#import "LTHNavigationViewController.h"
 #import "SFHFKeychainUtils.h"
 
 static NSString *const kKeychainPasscode = @"demoPasscode";
@@ -588,7 +589,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 
 
 - (void)prepareNavigationControllerWithController:(UIViewController *)viewController {
-	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: self];
+	UINavigationController *navController = [[LTHNavigationViewController alloc] initWithRootViewController: self];
     navController.modalPresentationStyle = UIModalPresentationFormSheet;
 	[viewController presentViewController: navController animated: YES completion: nil];
 	[self rotateAccordingToStatusBarOrientationAndSupportedOrientations];
