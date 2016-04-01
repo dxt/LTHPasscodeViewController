@@ -34,6 +34,7 @@
 @property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, weak) id<LTHPasscodeViewControllerDelegate> delegate;
 @property (assign) BOOL isCurrentlyOnScreen;
+@property (nonatomic) NSInteger maxFailedPasscodeAttempts;
 
 - (void)showLockscreen;
 - (void)showForEnablingPasscodeInViewController:(UIViewController *)viewController;

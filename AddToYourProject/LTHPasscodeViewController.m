@@ -376,7 +376,9 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [_passcodeTextField becomeFirstResponder];
+    if(!_isUserTurningPasscodeOff || FailedPasscodeAttempts < self.maxFailedPasscodeAttempts){
+        [_passcodeTextField becomeFirstResponder];
+    }
 }
 
 - (void)prepareToDismiss{
