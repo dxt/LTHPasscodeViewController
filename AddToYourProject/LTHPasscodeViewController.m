@@ -683,6 +683,10 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if([self.presentedViewController isKindOfClass:[UIAlertController class]]){
+        return NO;
+    }
+    
 	if ([string isEqualToString: @"\n"]) return NO;
     
     if(range.length > [textField.text length]){
