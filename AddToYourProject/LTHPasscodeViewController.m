@@ -695,6 +695,9 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 	
 	NSString *typedString = [textField.text stringByReplacingCharactersInRange: range
 																	withString: string];
+    
+    if (typedString.length > 4) return NO;
+    
 	if (typedString.length >= 1) _firstDigitTextField.secureTextEntry = YES;
 	else _firstDigitTextField.secureTextEntry = NO;
 	if (typedString.length >= 2) _secondDigitTextField.secureTextEntry = YES;
@@ -750,9 +753,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 			}
 		}
 	}
-	
-	if (typedString.length > 4) return NO;
-	
+		
 	return YES;
 }
 
