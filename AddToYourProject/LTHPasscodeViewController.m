@@ -989,7 +989,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 }
 
 
-- (NSUInteger)supportedInterfaceOrientations {
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
 	if (_beingDisplayedAsLockscreen) return UIInterfaceOrientationMaskAll;
 	// I'll be honest and mention I have no idea why this line of code below works.
 	// Without it, if you present the passcode view as lockscreen (directly on the window)
