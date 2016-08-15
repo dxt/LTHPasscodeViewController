@@ -63,7 +63,7 @@ static CGFloat const kSlideAnimationDuration = 0.15f;
 #define FailedPasscodeAttempts [[NSUserDefaults standardUserDefaults] integerForKey:@"com.signnow.failed_passcode_attempts"]
 #define FailedPasscodeAttemptsSet(v) [[NSUserDefaults standardUserDefaults] setInteger:v forKey:@"com.signnow.failed_passcode_attempts"]
 
-@interface LTHPasscodeViewController ()
+@interface LTHPasscodeViewController () <CAAnimationDelegate>
 
 @property (strong, nonatomic) UIButton *forgotPassscodeButton;
 @property (nonatomic) BOOL passcodeEntered;
